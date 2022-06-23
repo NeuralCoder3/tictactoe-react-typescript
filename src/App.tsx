@@ -2,35 +2,48 @@ import React from 'react';
 import './App.css';
 
 interface SquareProps {
-  index: number;
+  value: string;
+  onClick: () => void;
 }
 
-interface SquareState {
-  value: string | null;
+interface BoardState {
+  squares: string[]
 }
 
-class Square extends React.Component<SquareProps, SquareState> {
-  constructor(props: SquareProps) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
+class Square extends React.Component<SquareProps> {
 
   render() {
     return (
       <button 
         className="square" 
-        onClick={() => this.setState({value: 'X'})}>
-        {this.state.value}
+        onClick={this.props.onClick}>
+        {this.props.value}
       </button>
     );
   }
 }
 
-class Board extends React.Component {
+class Board extends React.Component<{},BoardState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+    };
+  }
+
+  handleClick(i: number) {
+    const squares = this.state.squares.slice();
+    squares[i] = 'X';
+    this.setState({squares: squares});
+  }
+
   renderSquare(i: number) {
-    return <Square index={i} />;
+    return (
+      <Square 
+        value={this.state.squares[i]} 
+        onClick={() => this.handleClick(i)}
+      />
+    );
   }
 
   render() {
@@ -65,10 +78,6 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
         </div>
       </div>
     );
