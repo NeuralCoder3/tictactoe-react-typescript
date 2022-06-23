@@ -1,11 +1,28 @@
 import React from 'react';
 import './App.css';
 
-class Square extends React.Component<{ value: number }> {
+interface SquareProps {
+  index: number;
+}
+
+interface SquareState {
+  value: string | null;
+}
+
+class Square extends React.Component<SquareProps, SquareState> {
+  constructor(props: SquareProps) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
+
   render() {
     return (
-      <button className="square" onClick={() => console.log("click")}>
-        {this.props.value}
+      <button 
+        className="square" 
+        onClick={() => this.setState({value: 'X'})}>
+        {this.state.value}
       </button>
     );
   }
@@ -13,7 +30,7 @@ class Square extends React.Component<{ value: number }> {
 
 class Board extends React.Component {
   renderSquare(i: number) {
-    return <Square value={i} />;
+    return <Square index={i} />;
   }
 
   render() {
